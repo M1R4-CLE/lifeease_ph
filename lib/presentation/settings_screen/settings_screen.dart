@@ -192,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => Navigator.pushNamed(context, AppRoutes.initial),
+          onPressed: () => Navigator.pushNamed(context, AppRoutes.initial!),
           tooltip: _isEnglish ? 'Back' : 'Bumalik',
         ),
         title: Text(
@@ -695,7 +695,7 @@ class _ActionButton extends StatelessWidget {
   final String label;
   final IconData icon;
   final Color color;
-  final Color bgColor;
+  final Color? bgColor;
   final bool isLoading;
   final VoidCallback? onTap;
   final bool bigButtonMode;
