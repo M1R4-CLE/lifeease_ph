@@ -158,7 +158,7 @@ class ReminderCardWidget extends StatelessWidget {
                 children: [
                   _ActionButton(
                     icon: 'check',
-                    color: AppTheme.success ?? const Color(0xFF16A34A),
+                    color: AppTheme.success,
                     tooltip: isEnglish ? 'Mark Done' : 'Markahan Tapos',
                     onTap: () {
                       HapticFeedback.lightImpact();

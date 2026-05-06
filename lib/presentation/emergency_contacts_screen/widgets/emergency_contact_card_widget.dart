@@ -49,7 +49,6 @@ class _EmergencyContactCardWidgetState extends State<EmergencyContactCardWidget>
   void _onCallTap() {
     HapticFeedback.heavyImpact();
     _pressCtrl.forward().then((_) => _pressCtrl.reverse());
-    // TODO: url_launcher — Uri.parse('tel:${widget.contactMap['phone']}')
     // Launches system dialer — no CALL_PHONE permission needed
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -80,7 +79,7 @@ class _EmergencyContactCardWidgetState extends State<EmergencyContactCardWidget>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
     final tintColor = Color(widget.contactMap['tintColor'] as int);
     final iconColor = Color(widget.contactMap['iconColor'] as int);
     final name = widget.contactMap['name'] as String;

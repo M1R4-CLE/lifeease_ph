@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/services.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../core/app_export.dart';
@@ -6,8 +7,6 @@ import './widgets/cta_button_widget.dart';
 import './widgets/recurrence_selector_widget.dart';
 import './widgets/reminder_form_header_widget.dart';
 import './widgets/time_slot_grid_widget.dart';
-
-// TODO: Replace with Riverpod/Bloc for production
 
 class AddReminderScreen extends StatefulWidget {
   const AddReminderScreen({super.key});
@@ -66,14 +65,19 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
   }
 
   Future<void> _initSpeech() async {
-    _speechAvailable = await _speech.initialize(
-      onError: (error) => debugPrint('STT error: $error'),
-      onStatus: (status) {
-        if (status == 'done' || status == 'notListening') {
-          if (mounted) setState(() => _isListening = false);
-        }
-      },
-    );
+    try {
+      _speechAvailable = await _speech.initialize(
+        onError: (error) => debugPrint('STT error: $error'),
+        onStatus: (status) {
+          if (status == 'done' || status == 'notListening') {
+            if (mounted) setState(() => _isListening = false);
+          }
+        },
+      );
+    } catch (e) {
+      debugPrint('STT initialization error: $e');
+      _speechAvailable = false;
+    }
     if (mounted) setState(() {});
   }
 
@@ -124,49 +128,65 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
     HapticFeedback.mediumImpact();
 
     if (!_speechAvailable) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _isEnglish
-                ? 'Speech recognition not available on this device.'
-                : 'Hindi available ang speech recognition sa device na ito.',
-            style: GoogleFonts.nunitoSans(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              _isEnglish
+                  ? 'Speech recognition not available on this device.'
+                  : 'Hindi available ang speech recognition sa device na ito.',
+              style: GoogleFonts.nunitoSans(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      );
+        );
+      }
       return;
     }
 
-    if (_isListening) {
-      await _speech.stop();
-      setState(() => _isListening = false);
-    } else {
-      setState(() {
-        _isListening = true;
-        _titleController.clear();
-      });
-      await _speech.listen(
-        onResult: (result) {
+    try {
+      if (_isListening) {
+        await _speech.stop();
+        if (mounted) setState(() => _isListening = false);
+      } else {
+        if (mounted) {
           setState(() {
-            _titleController.text = result.recognizedWords;
+            _isListening = true;
+            _titleController.clear();
           });
-          if (result.finalResult) {
-            setState(() => _isListening = false);
-          }
-        },
-        listenFor: const Duration(seconds: 30),
-        pauseFor: const Duration(seconds: 4),
-        localeId: _isEnglish ? 'en_US' : 'fil_PH',
-        cancelOnError: true,
-        partialResults: true,
-      );
+        }
+        await _speech.listen(
+          onResult: (result) {
+            if (mounted) {
+              setState(() {
+                _titleController.text = result.recognizedWords;
+              });
+            }
+            if (result.finalResult) {
+              if (mounted) setState(() => _isListening = false);
+            }
+          },
+          listenFor: const Duration(seconds: 30),
+          pauseFor: const Duration(seconds: 4),
+          localeId: _isEnglish ? 'en_US' : 'fil_PH',
+          cancelOnError: true,
+          partialResults: true,
+        );
+      }
+    } catch (e) {
+      debugPrint('STT listening error: $e');
+      if (mounted) setState(() => _isListening = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Mic error. Please try again.')),
+        );
+      }
     }
   }
 
@@ -195,11 +215,6 @@ class _AddReminderScreenState extends State<AddReminderScreen> {
     }
 
     setState(() => _isLoading = true);
-
-    // TODO: ReminderRepository.save(Reminder(...)) — SQLite/Hive
-    // TODO: AlarmManager.setExactAndAllowWhileIdle(reminderId, triggerTime)
-    // TODO: SuggestionPatternRepository.recordHour(_selectedHour + (_isPM ? 12 : 0))
-    // TODO: SyncQueue.enqueue(SyncEvent.reminderCreated)
 
     await Future.delayed(const Duration(milliseconds: 800));
 

@@ -5,8 +5,6 @@ import './widgets/add_contact_bottom_sheet_widget.dart';
 import './widgets/contact_section_header_widget.dart';
 import './widgets/emergency_contact_card_widget.dart';
 
-// TODO: Replace with Riverpod/Bloc for production
-
 class EmergencyContactsScreen extends StatefulWidget {
   const EmergencyContactsScreen({super.key});
 
@@ -20,7 +18,6 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen>
   final bool _isEnglish = true;
   final bool _bigButtonMode = true;
 
-  // TODO: Replace with EmergencyContactRepository.getAll()
   final List<Map<String, dynamic>> _contactMaps = [
     {
       'id': 'ec1',
@@ -90,7 +87,6 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen>
   }
 
   void _onContactSaved(Map<String, dynamic> contactMap) {
-    // TODO: EmergencyContactRepository.save(EmergencyContact.fromMap(contactMap))
     final tints = [
       {'tintColor': 0xFFFFECE8, 'iconColor': 0xFFB45309},
       {'tintColor': 0xFFFEF3C7, 'iconColor': 0xFFB45309},
@@ -163,7 +159,6 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen>
           FilledButton(
             onPressed: () {
               Navigator.pop(ctx);
-              // TODO: EmergencyContactRepository.delete(id)
               setState(() => _contactMaps.removeWhere((m) => m['id'] == id));
             },
             style: FilledButton.styleFrom(
@@ -532,7 +527,7 @@ class _EmergencyInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

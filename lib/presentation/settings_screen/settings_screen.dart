@@ -192,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => Navigator.pushNamed(context, AppRoutes.initial!),
+          onPressed: () => Navigator.pushNamed(context, AppRoutes.initial),
           tooltip: _isEnglish ? 'Back' : 'Bumalik',
         ),
         title: Text(
@@ -623,6 +623,7 @@ class _ToggleRow extends StatelessWidget {
           Switch(
             value: value,
             onChanged: onChanged,
+            // ignore: deprecated_member_use
             activeColor: AppTheme.primary,
           ),
         ],

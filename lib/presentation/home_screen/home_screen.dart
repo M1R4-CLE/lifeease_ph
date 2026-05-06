@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../core/app_export.dart';
@@ -8,8 +7,6 @@ import './widgets/home_search_bar_widget.dart';
 import './widgets/next_appointment_widget.dart';
 import './widgets/reminder_list_widget.dart';
 import './widgets/suggestion_card_widget.dart';
-
-// TODO: Replace with Riverpod/Bloc for production
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool _speechAvailable = false;
 
-  // TODO: Replace with local DB query (SQLite/Hive)
   final List<Map<String, dynamic>> _reminderMaps = [
     {
       'id': 'r1',
@@ -87,7 +83,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     },
   ];
 
-  // TODO: Replace with EmergencyContactRepository.getAll()
   final List<EmergencyContact> _emergencyContacts = [
     EmergencyContact(
       id: 'ec1',
@@ -122,10 +117,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _initSpeech() async {
-    _speechAvailable = await _speech.initialize(
-      onError: (error) => debugPrint('STT error: $error'),
-      onStatus: (status) => debugPrint('STT status: $status'),
-    );
+    try {
+      _speechAvailable = await _speech.initialize(
+        onError: (error) => debugPrint('STT error: $error'),
+        onStatus: (status) => debugPrint('STT status: $status'),
+      );
+    } catch (e) {
+      debugPrint('STT initialization error: $e');
+      _speechAvailable = false;
+    }
     if (mounted) setState(() {});
   }
 
@@ -219,7 +219,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void _onReminderStatusChanged(String id, String newStatus) {
     HapticFeedback.lightImpact();
-    // TODO: Update via ReminderRepository.updateStatus(id, newStatus)
     setState(() {
       final idx = _reminderMaps.indexWhere((r) => r['id'] == id);
       if (idx != -1) {
@@ -489,47 +488,67 @@ class _VoiceInputSheetState extends State<_VoiceInputSheet>
   Future<void> _toggleListening() async {
     HapticFeedback.mediumImpact();
     if (!widget.speechAvailable) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            widget.isEnglish
-                ? 'Speech recognition not available on this device.'
-                : 'Hindi available ang speech recognition sa device na ito.',
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              widget.isEnglish
+                  ? 'Speech recognition not available on this device.'
+                  : 'Hindi available ang speech recognition sa device na ito.',
+            ),
           ),
-        ),
-      );
+        );
+      }
       return;
     }
 
-    if (_isListening) {
-      await widget.speech.stop();
+    try {
+      if (_isListening) {
+        await widget.speech.stop();
+        _micPulse.stop();
+        _micPulse.reset();
+        if (mounted) setState(() => _isListening = false);
+      } else {
+        if (mounted) {
+          setState(() {
+            _isListening = true;
+            _transcribedText = '';
+          });
+        }
+        _micPulse.repeat(reverse: true);
+        await widget.speech.listen(
+          onResult: (result) {
+            if (mounted) {
+              setState(() {
+                _transcribedText = result.recognizedWords;
+              });
+            }
+            if (result.finalResult && _transcribedText.isNotEmpty) {
+              _micPulse.stop();
+              _micPulse.reset();
+              if (mounted) setState(() => _isListening = false);
+              widget.onCommandRecognized(_transcribedText);
+            }
+          },
+          listenFor: const Duration(seconds: 30),
+          pauseFor: const Duration(seconds: 4),
+          localeId: widget.isEnglish ? 'en_US' : 'fil_PH',
+          // ignore: deprecated_member_use
+          cancelOnError: true,
+          // ignore: deprecated_member_use
+          partialResults: true,
+        );
+      }
+    } catch (e) {
+      debugPrint('STT listening error: $e');
       _micPulse.stop();
       _micPulse.reset();
-      setState(() => _isListening = false);
-    } else {
-      setState(() {
-        _isListening = true;
-        _transcribedText = '';
-      });
-      _micPulse.repeat(reverse: true);
-      await widget.speech.listen(
-        onResult: (result) {
-          setState(() {
-            _transcribedText = result.recognizedWords;
-          });
-          if (result.finalResult && _transcribedText.isNotEmpty) {
-            _micPulse.stop();
-            _micPulse.reset();
-            setState(() => _isListening = false);
-            widget.onCommandRecognized(_transcribedText);
-          }
-        },
-        listenFor: const Duration(seconds: 30),
-        pauseFor: const Duration(seconds: 4),
-        localeId: widget.isEnglish ? 'en_US' : 'fil_PH',
-        cancelOnError: true,
-        partialResults: true,
-      );
+      if (mounted) setState(() => _isListening = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Mic error. Please try again.')),
+        );
+      }
     }
   }
 
