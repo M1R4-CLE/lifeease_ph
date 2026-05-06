@@ -192,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pushNamed(context, AppRoutes.initial),
           tooltip: _isEnglish ? 'Back' : 'Bumalik',
         ),
         title: Text(

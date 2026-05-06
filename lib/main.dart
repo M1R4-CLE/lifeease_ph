@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../core/app_export.dart';
-import '../widgets/custom_error_widget.dart';
+import 'package:lifeease/shared/theme/app_theme.dart';
+import 'package:lifeease/shared/widgets/custom_error_widget.dart';
+import 'package:sizer/sizer.dart';
 import './routes/app_routes.dart';
 
 void main() async {

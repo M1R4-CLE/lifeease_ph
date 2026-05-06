@@ -1,0 +1,28 @@
+Analyzing lifeease_ph...                                        
+
+   info • The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' • lib/main.dart:1:8 • unnecessary_import
+   info • The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of '../../core/app_export.dart' • lib/presentation/add_reminder_screen/add_reminder_screen.dart:1:8 • unnecessary_import
+   info • 'cancelOnError' is deprecated and shouldn't be used. Use SpeechListenOptions.cancelOnError instead • lib/presentation/add_reminder_screen/add_reminder_screen.dart:167:9 • deprecated_member_use
+   info • 'partialResults' is deprecated and shouldn't be used. Use SpeechListenOptions.partialResults instead • lib/presentation/add_reminder_screen/add_reminder_screen.dart:168:9 • deprecated_member_use
+   info • The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' • lib/presentation/add_reminder_screen/widgets/cta_button_widget.dart:1:8 • unnecessary_import
+   info • The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' • lib/presentation/add_reminder_screen/widgets/recurrence_selector_widget.dart:1:8 • unnecessary_import
+  error • The method 'CustomIconWidget' isn't defined for the type '_RecurrenceChip' • lib/presentation/add_reminder_screen/widgets/recurrence_selector_widget.dart:116:15 • undefined_method
+   info • The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' • lib/presentation/add_reminder_screen/widgets/reminder_form_header_widget.dart:2:8 • unnecessary_import
+  error • The method 'CustomIconWidget' isn't defined for the type 'ReminderFormHeaderWidget' • lib/presentation/add_reminder_screen/widgets/reminder_form_header_widget.dart:64:26 • undefined_method
+   info • The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' • lib/presentation/add_reminder_screen/widgets/time_slot_grid_widget.dart:1:8 • unnecessary_import
+warning • The value of the local variable 'theme' isn't used • lib/presentation/add_reminder_screen/widgets/time_slot_grid_widget.dart:31:11 • unused_local_variable
+warning • The value of the local variable 'theme' isn't used • lib/presentation/emergency_contacts_screen/emergency_contacts_screen.dart:535:11 • unused_local_variable
+warning • The value of the local variable 'theme' isn't used • lib/presentation/emergency_contacts_screen/widgets/emergency_contact_card_widget.dart:83:11 • unused_local_variable
+   info • The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of '../../core/app_export.dart' • lib/presentation/home_screen/home_screen.dart:1:8 • unnecessary_import
+   info • 'cancelOnError' is deprecated and shouldn't be used. Use SpeechListenOptions.cancelOnError instead • lib/presentation/home_screen/home_screen.dart:530:9 • deprecated_member_use
+   info • 'partialResults' is deprecated and shouldn't be used. Use SpeechListenOptions.partialResults instead • lib/presentation/home_screen/home_screen.dart:531:9 • deprecated_member_use
+   info • The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' • lib/presentation/home_screen/widgets/big_button_row_widget.dart:1:8 • unnecessary_import
+   info • The import of 'package:flutter/material.dart' is unnecessary because all of the used elements are also provided by the import of '../../../core/app_export.dart' • lib/presentation/home_screen/widgets/big_button_row_widget.dart:2:8 • unnecessary_import
+   info • The import of 'package:google_fonts/google_fonts.dart' is unnecessary because all of the used elements are also provided by the import of '../../../core/app_export.dart' • lib/presentation/home_screen/widgets/big_button_row_widget.dart:4:8 • unnecessary_import
+   info • The import of '../../../shared/theme/app_theme.dart' is unnecessary because all of the used elements are also provided by the import of '../../../core/app_export.dart' • lib/presentation/home_screen/widgets/big_button_row_widget.dart:7:8 • unnecessary_import
+   info • The import of 'dart:ui' is unnecessary because all of the used elements are also provided by the import of '../../../core/app_export.dart' • lib/presentation/home_screen/widgets/home_search_bar_widget.dart:2:8 • unnecessary_import
+   info • The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of '../../../core/app_export.dart' • lib/presentation/home_screen/widgets/next_appointment_widget.dart:3:8 • unnecessary_import
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre • lib/presentation/settings_screen/settings_screen.dart:626:13 • deprecated_member_use
+warning • Unused import: '../theme/app_theme.dart' • lib/shared/widgets/app_navigation.dart:2:8 • unused_import
+
+24 issues found. (ran in 1.6s)

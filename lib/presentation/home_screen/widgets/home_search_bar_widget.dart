@@ -1,4 +1,3 @@
-
 import '../../../core/app_export.dart';
 
 class HomeSearchBarWidget extends StatelessWidget {
